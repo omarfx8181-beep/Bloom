@@ -30,7 +30,7 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-After editing, hard-refresh; the service worker is network-first so changes show up on reload. If caching gets sticky, bump the `CACHE` version suffix in `sw.js` (currently `bloom-v1`) to force old caches to purge on activate.
+After editing, hard-refresh; the service worker is network-first so changes show up on reload. If caching gets sticky, bump the `CACHE` version suffix in `sw.js` (currently `bloom-v2`) to force old caches to purge on activate.
 
 ## Key implementation details
 
@@ -43,7 +43,7 @@ After editing, hard-refresh; the service worker is network-first so changes show
   `checks` holds both milestone and activity ids. **Item ids are stable strings** derived from content order: milestones `m:<stageIdx>:<domainKey>:<i>`, activities `a:<stageIdx>:<groupKey>:<i>`. Keep `STAGES` item order stable or you'll shift saved checks. `load()` has a migration guard that normalizes shape and back-fills missing fields — extend it (don't break it) if the shape changes.
 - **Age / stage math:** `ageMonths(birth)` returns a fractional age. `stageOf(m)` picks the stage; `markerPct(m)` maps age onto the six equal-width ruler segments for the NOW pin. There is no hardcoded date anchor — everything derives from each child's `birth`.
 - **Rendering:** `render()` re-renders the visible view from `STAGES` + the active child's `checks`. There's no framework — keep it that way unless asked. Section expand/collapse state lives in `openSecs`.
-- **Content:** edit the `STAGES` array to change milestones or activities. `DOMAINS` and `GROUPS` define the section metadata (label, emoji, accent hue).
+- **Content:** edit the `STAGES` array to change milestones or activities. Each **milestone is an object** `{t, look, tip}` — `t` is the checklist text, `look` ("what it looks like") and `tip` ("if not yet, try") fill the tap-to-expand info panel; **activities remain plain strings**. Tapping a milestone's body toggles `openInfo[id]` (the expander); the separate `.check` zone toggles the check, so the two taps never collide. `DOMAINS` and `GROUPS` define the section metadata (label, emoji, accent hue).
 
 ## Constraints
 

@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#171320;
@@ -274,6 +274,56 @@ header .leaf{font-size:30px;}
 @keyframes fall{to{transform:translateY(112vh) rotate(var(--r));}}
 
 .hide{display:none!important;}
+
+/* ============================================================
+   Readability & "tap for more" upgrades
+   (soft body font, larger type, stronger contrast, bigger taps)
+   ============================================================ */
+:root{--dim:#cbc2e6;--dim2:#aaa0c8;}
+body{font-family:'Nunito',system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.5;}
+h1,.welcome h2,.modal h3,.cele-card h2,.sec-title .t,.now-foot .nf b,.ruler-head .who{
+  font-family:'Outfit','Nunito',sans-serif;
+}
+.sub{font-size:14.5px;color:var(--dim);}
+.card{padding:20px;}
+
+/* sections */
+.sec-head{padding:17px 16px;gap:13px;}
+.sec-title .t{font-size:17px;}
+.sec-title .c{font-size:13px;color:var(--dim);}
+
+/* gentle "tap to learn more" hint above the milestone list */
+.tap-hint{font-size:13.5px;color:var(--dim);text-align:center;line-height:1.5;margin:2px 8px 16px;}
+
+/* milestone rows: a roomy check zone + a tappable body that expands */
+.item{align-items:stretch;gap:4px;padding:4px 2px;}
+.check{
+  flex:0 0 auto;border:none;background:none;cursor:pointer;display:flex;align-items:flex-start;
+  padding:13px 12px 13px 6px;margin:0;
+}
+.box{width:27px;height:27px;}
+.body{flex:1;min-width:0;cursor:pointer;padding:13px 2px;}
+.tx-row{display:flex;align-items:flex-start;gap:10px;}
+.tx{font-size:16px;line-height:1.5;font-weight:500;flex:1;}
+.info-ico{flex:0 0 auto;color:var(--lav);font-size:15px;font-weight:700;margin-top:1px;}
+.item.expanded .info-ico{color:var(--rose);}
+.more{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+.item.expanded .more{max-height:340px;}
+.more-in{padding:11px 2px 5px;}
+.more-in p{margin:0 0 10px;font-size:14.5px;line-height:1.6;color:var(--dim);}
+.more-in p:last-child{margin-bottom:2px;}
+.more-in .ml{
+  display:block;font-size:11.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+  color:var(--lav);margin-bottom:3px;
+}
+
+/* misc contrast lifts on small text */
+.ruler-head .age{font-size:13.5px;color:var(--dim);}
+.ruler .labels span{font-size:11px;color:var(--dim);}
+.now-foot .nf span{font-size:12px;color:var(--dim);}
+.disclaim{font-size:12.5px;color:var(--dim);}
+.note-wrap label{font-size:13px;color:var(--dim);}
+.field label,.set-child .meta span{color:var(--dim);}
 </style>
 </head>
 <body>
@@ -414,12 +464,35 @@ const GROUPS=[
 const STAGES=[
 { id:'6-9', lo:6, hi:9, short:'6–9', label:'6 to 9 months',
   milestones:{
-    moving:['Sits without support','Gets into a sitting position on her own','Moves to reach a toy — rolling, rocking, or scooting'],
-    hands:['Moves things from one hand to the other','Rakes food toward himself with his fingers','Bangs two things together'],
-    talking:['Babbles long strings like “mamama” and “bababa”','Lifts arms up to be picked up'],
-    thinking:['Looks for objects when they drop out of sight','Watches the path of something as it falls'],
-    social:['Is shy, clingy, or fearful around strangers','Shows several expressions — happy, sad, angry, surprised','Looks over when you call her name','Reacts when you leave — looks, reaches, or cries','Smiles or laughs during peek-a-boo'],
-    everyday:['Brings food to her mouth with her fingers','Opens her mouth for the spoon when hungry']
+    moving:[
+      {t:'Sits without support',look:'She stays upright on the floor for a moment without you holding her or propping cushions.',tip:'Sit her between your legs and give a little less support each day.'},
+      {t:'Gets into a sitting position on her own',look:'From lying down or hands-and-knees, she pushes herself up to sitting.',tip:'Lay a favourite toy just to her side so she twists and props up to reach it.'},
+      {t:'Moves to reach a toy — rolling, rocking, or scooting',look:'He shifts his whole body to get something he wants, even before he can crawl.',tip:'Place a toy just out of reach during tummy time and cheer every wiggle.'}
+    ],
+    hands:[
+      {t:'Moves things from one hand to the other',look:'She passes a toy from one hand to the other instead of dropping it.',tip:'Hand her a light toy, then offer a second one so she has to switch hands.'},
+      {t:'Rakes food toward himself with his fingers',look:'He sweeps small bits of food toward his palm with curled fingers.',tip:'Scatter a few soft puffs on the tray and let him practise gathering them.'},
+      {t:'Bangs two things together',look:'He holds a toy in each hand and knocks them together on purpose.',tip:'Give two light blocks or cups and show him the happy clack.'}
+    ],
+    talking:[
+      {t:'Babbles long strings like “mamama” and “bababa”',look:'She repeats the same sounds in a row, almost like practising syllables.',tip:'Babble the same sounds back — it becomes a little conversation.'},
+      {t:'Lifts arms up to be picked up',look:'He reaches both arms toward you when he wants to be held.',tip:'Pause with open arms and say “up?” so he learns the gesture.'}
+    ],
+    thinking:[
+      {t:'Looks for objects when they drop out of sight',look:'When a toy falls, she looks toward where it went instead of forgetting it.',tip:'Drop a soft toy slowly and say “uh-oh, where did it go?”'},
+      {t:'Watches the path of something as it falls',look:'His eyes follow a dropped ball all the way down.',tip:'Gently drop or roll toys and let him track them with his eyes.'}
+    ],
+    social:[
+      {t:'Is shy, clingy, or fearful around strangers',look:'She gets quiet, clings, or frets when someone new comes close.',tip:'Let new people approach slowly while she stays safe in your arms.'},
+      {t:'Shows several expressions — happy, sad, angry, surprised',look:'Her face clearly changes with her mood, not just smiles.',tip:'Name what you see — “you look surprised!” — to mirror her feelings.'},
+      {t:'Looks over when you call her name',look:'She turns toward you when she hears her name.',tip:'Say her name warmly from nearby, then from farther, like a gentle game.'},
+      {t:'Reacts when you leave — looks, reaches, or cries',look:'He notices when you step away and shows he wants you back.',tip:'Play short peek-a-boo leaving and returning so he learns you come back.'},
+      {t:'Smiles or laughs during peek-a-boo',look:'She lights up and giggles when you hide and reappear.',tip:'Hide behind your hands and pop out with a soft “peek-a-boo!”'}
+    ],
+    everyday:[
+      {t:'Brings food to her mouth with her fingers',look:'She picks up a bite and gets it to her mouth herself.',tip:'Offer soft, graspable foods and let her feed herself, mess and all.'},
+      {t:'Opens her mouth for the spoon when hungry',look:'He opens up when he sees the spoon coming.',tip:'Pause the spoon in view and let him lean in when he is ready.'}
+    ]
   },
   activities:{
     reading:['Read a sturdy board book together every day, even for a minute','Name each picture as you point to it','Let him hold and mouth the book — that counts as reading too'],
@@ -429,12 +502,30 @@ const STAGES=[
   }},
 { id:'9-12', lo:9, hi:12, short:'9–12', label:'9 to 12 months',
   milestones:{
-    moving:['Pulls up to stand','Walks while holding on to furniture (“cruising”)'],
-    hands:['Picks up tiny things with thumb and pointer finger','Lets go of objects on purpose'],
-    talking:['Waves “bye-bye”','Calls a parent “mama,” “dada,” or a special name','Understands “no” — pauses or briefly stops'],
-    thinking:['Puts something into a container, like a block in a cup','Looks for things he sees you hide'],
-    social:['Plays games with you, like pat-a-cake'],
-    everyday:['Drinks from a cup without a lid as you hold it','Finger-feeds herself small bites']
+    moving:[
+      {t:'Pulls up to stand',look:'She grabs furniture and pulls herself up to standing.',tip:'Offer a low, sturdy surface with a toy on top to reach for.'},
+      {t:'Walks while holding on to furniture (“cruising”)',look:'He side-steps along the couch holding on for balance.',tip:'Line up stable furniture so he can cruise from one piece to the next.'}
+    ],
+    hands:[
+      {t:'Picks up tiny things with thumb and pointer finger',look:'She pinches a small puff between thumb and forefinger.',tip:'Offer a few soft o-shaped cereal pieces to practise the pinch.'},
+      {t:'Lets go of objects on purpose',look:'He drops or hands over a toy deliberately, not by accident.',tip:'Play “drop it in the cup” and clap when he lets go.'}
+    ],
+    talking:[
+      {t:'Waves “bye-bye”',look:'She waves when someone comes or goes.',tip:'Wave every single time anyone leaves, and take her hand to wave too.'},
+      {t:'Calls a parent “mama,” “dada,” or a special name',look:'He uses a specific sound for you, on purpose.',tip:'Point to yourself and say your name often during play.'},
+      {t:'Understands “no” — pauses or briefly stops',look:'She pauses when you say “no,” even if just for a second.',tip:'Say “no” calmly, then redirect to something safe she can have.'}
+    ],
+    thinking:[
+      {t:'Puts something into a container, like a block in a cup',look:'He drops a toy into a cup or box on purpose.',tip:'Give a cup and a few blocks to fill and dump together.'},
+      {t:'Looks for things he sees you hide',look:'When you tuck a toy under a cloth, he lifts it to find it.',tip:'Hide a toy under a blanket while he watches, then find it together.'}
+    ],
+    social:[
+      {t:'Plays games with you, like pat-a-cake',look:'She joins in with the actions of a simple game.',tip:'Repeat pat-a-cake daily; she will start doing the moves with you.'}
+    ],
+    everyday:[
+      {t:'Drinks from a cup without a lid as you hold it',look:'He takes sips from an open cup while you steady it.',tip:'Offer a few sips of water from a small open cup at meals.'},
+      {t:'Finger-feeds herself small bites',look:'She picks up soft pieces and eats them herself.',tip:'Put a few soft foods on the tray and let her lead.'}
+    ]
   },
   activities:{
     reading:['Read lift-the-flap books and let her open the flaps','Ask “Where’s the puppy?” and point together','Re-read her favourite book as often as she likes'],
@@ -444,12 +535,36 @@ const STAGES=[
   }},
 { id:'12-18', lo:12, hi:18, short:'12–18', label:'12 to 18 months',
   milestones:{
-    moving:['Takes a few steps on his own','Walks without holding on to anyone','Climbs on and off a couch or chair without help'],
-    hands:['Stacks at least two small blocks','Scribbles with a crayon'],
-    talking:['Tries to say three or more words besides “mama”/“dada”','Follows a one-step direction without gestures, like “Give it to me”','Points to ask for something or get help'],
-    thinking:['Tries to use things the right way — a phone, cup, or book','Copies you doing chores, like sweeping','Plays with toys simply, like pushing a toy car'],
-    social:['Copies other children while playing','Shows you an object she likes','Points to show you something interesting','Looks at a few pages in a book with you'],
-    everyday:['Tries to use a spoon','Drinks from an open cup, with some spills','Helps with dressing by pushing an arm through a sleeve']
+    moving:[
+      {t:'Takes a few steps on his own',look:'He lets go and takes a step or two before sitting down.',tip:'Kneel a short distance away with open arms and cheer each step.'},
+      {t:'Walks without holding on to anyone',look:'She walks across a room on her own.',tip:'Give safe, open floor space and a push-toy to build confidence.'},
+      {t:'Climbs on and off a couch or chair without help',look:'He gets up onto and back down from low furniture by himself.',tip:'Let him practise on a low, soft sofa while you spot him.'}
+    ],
+    hands:[
+      {t:'Stacks at least two small blocks',look:'She balances one block on top of another.',tip:'Build a little tower together and let her add the next block.'},
+      {t:'Scribbles with a crayon',look:'He makes marks on paper with a crayon.',tip:'Offer a chunky crayon and big paper, and scribble alongside him.'}
+    ],
+    talking:[
+      {t:'Tries to say three or more words besides “mama”/“dada”',look:'She attempts a few other words, even if not perfectly clear.',tip:'Name favourite things over and over — “ball,” “dog,” “milk.”'},
+      {t:'Follows a one-step direction without gestures, like “Give it to me”',look:'He does a simple request without you pointing or motioning.',tip:'Ask for simple actions during play and thank him warmly.'},
+      {t:'Points to ask for something or get help',look:'She points at what she wants instead of only reaching.',tip:'When she points, name it and respond so pointing “works.”'}
+    ],
+    thinking:[
+      {t:'Tries to use things the right way — a phone, cup, or book',look:'He holds a phone to his ear or turns book pages.',tip:'Let him explore real-life objects and copy how you use them.'},
+      {t:'Copies you doing chores, like sweeping',look:'She imitates everyday jobs she sees you do.',tip:'Hand her a small cloth or toy broom to “help” you.'},
+      {t:'Plays with toys simply, like pushing a toy car',look:'He uses a toy the way it is meant — rolling a car along.',tip:'Show him a simple action and let him copy it.'}
+    ],
+    social:[
+      {t:'Copies other children while playing',look:'She watches another child and tries the same thing.',tip:'Arrange easy playtime near other little ones.'},
+      {t:'Shows you an object she likes',look:'He holds something up to show you, not to give it away.',tip:'Show interest — “wow, your car!” — so sharing feels good.'},
+      {t:'Points to show you something interesting',look:'She points at a dog or a light to share it with you.',tip:'Follow her point, name it, and share her excitement.'},
+      {t:'Looks at a few pages in a book with you',look:'He stays with you to turn a few pages of a book.',tip:'Keep books short and let him turn the pages.'}
+    ],
+    everyday:[
+      {t:'Tries to use a spoon',look:'She scoops and aims a spoon toward her mouth, with spills.',tip:'Offer a loaded spoon and let her bring it the rest of the way.'},
+      {t:'Drinks from an open cup, with some spills',look:'He drinks from an open cup himself, a little messy.',tip:'Use a small cup with just a bit of water to start.'},
+      {t:'Helps with dressing by pushing an arm through a sleeve',look:'She pushes her arm or leg through as you dress her.',tip:'Pause and say “push!” so she finishes the motion.'}
+    ]
   },
   activities:{
     reading:['Pause and let her fill in a word in a familiar book','Point to and name one thing on every page','Keep books low so she can choose her own'],
@@ -459,12 +574,32 @@ const STAGES=[
   }},
 { id:'18-24', lo:18, hi:24, short:'18–24', label:'18 to 24 months',
   milestones:{
-    moving:['Runs','Kicks a ball','Walks up a few stairs, with or without help'],
-    hands:['Holds something in one hand while using the other — holds a jar and takes off the lid','Tries switches, knobs, and buttons on a toy'],
-    talking:['Says at least two words together, like “More milk”','Points to things in a book when you ask','Points to at least two body parts when asked','Uses more gestures — blowing a kiss, nodding yes'],
-    thinking:['Plays with more than one toy at a time, like putting toy food on a plate'],
-    social:['Notices when others are hurt or upset','Looks at your face to see how to react in a new situation'],
-    everyday:['Eats with a spoon','Helps undress himself']
+    moving:[
+      {t:'Runs',look:'He moves faster than a walk, both feet hurrying along.',tip:'Play gentle chase in a safe, open space.'},
+      {t:'Kicks a ball',look:'She swings her foot to move a ball forward.',tip:'Roll a soft ball to her feet and cheer the kick.'},
+      {t:'Walks up a few stairs, with or without help',look:'He climbs a few steps holding the rail or your hand.',tip:'Practise a few stairs together, one foot at a time.'}
+    ],
+    hands:[
+      {t:'Holds something in one hand while using the other — holds a jar and takes off the lid',look:'She steadies an object with one hand and works it with the other.',tip:'Give containers with loose lids to open and close.'},
+      {t:'Tries switches, knobs, and buttons on a toy',look:'He pokes, turns, and flips parts to make things happen.',tip:'Offer busy-boards or toys with buttons and dials.'}
+    ],
+    talking:[
+      {t:'Says at least two words together, like “More milk”',look:'She links two words to make a little phrase.',tip:'Model short phrases back — “more milk?”, “big truck.”'},
+      {t:'Points to things in a book when you ask',look:'He points to the right picture when you ask “where is the cat?”',tip:'Ask “where is the…?” on each page and celebrate the point.'},
+      {t:'Points to at least two body parts when asked',look:'She points to her nose or toes when you name them.',tip:'Sing body-part songs and touch each part together.'},
+      {t:'Uses more gestures — blowing a kiss, nodding yes',look:'He adds gestures beyond waving and pointing.',tip:'Model blowing kisses and nodding during everyday chats.'}
+    ],
+    thinking:[
+      {t:'Plays with more than one toy at a time, like putting toy food on a plate',look:'She combines toys in play, not just one at a time.',tip:'Offer toys that go together — a plate and play food, cars and a ramp.'}
+    ],
+    social:[
+      {t:'Notices when others are hurt or upset',look:'He pauses or looks concerned when someone is sad.',tip:'Name feelings — “he is sad” — and show gentle comfort.'},
+      {t:'Looks at your face to see how to react in a new situation',look:'She glances at you to check whether something is okay.',tip:'Give calm, reassuring looks in new places.'}
+    ],
+    everyday:[
+      {t:'Eats with a spoon',look:'He gets most of a spoonful to his mouth himself.',tip:'Serve thick foods like yogurt that stay on the spoon.'},
+      {t:'Helps undress himself',look:'She pulls off socks, a hat, or loose clothes.',tip:'Let her finish taking off easy items at bath time.'}
+    ]
   },
   activities:{
     reading:['Ask “What’s that?” and wait for her to name pictures','Read books about feelings and daily routines','Let him turn the pages himself'],
@@ -474,12 +609,32 @@ const STAGES=[
   }},
 { id:'24-30', lo:24, hi:30, short:'24–30', label:'24 to 30 months',
   milestones:{
-    moving:['Jumps off the ground with both feet'],
-    hands:['Twists things with her hands — doorknobs, lids','Turns book pages one at a time'],
-    talking:['Says about 50 words','Says an action word in a phrase, like “Doggie run”','Names things in a book when you point and ask','Uses words like “I,” “me,” or “we”'],
-    thinking:['Uses things to pretend, like feeding a block to a doll','Solves simple problems, like standing on a stool to reach','Follows two-step instructions','Knows at least one colour'],
-    social:['Plays alongside other children, sometimes with them','Shows you what she can do — “Look at me!”'],
-    everyday:['Takes off some clothes by himself, like loose pants']
+    moving:[
+      {t:'Jumps off the ground with both feet',look:'He gets both feet off the floor at the same time.',tip:'Hold hands and count “1-2-3, jump!” together.'}
+    ],
+    hands:[
+      {t:'Twists things with her hands — doorknobs, lids',look:'She rotates her wrist to turn knobs and lids.',tip:'Offer jars and toys that twist open and closed.'},
+      {t:'Turns book pages one at a time',look:'He separates and turns single pages, not clumps.',tip:'Pause and let him turn each page as you read.'}
+    ],
+    talking:[
+      {t:'Says about 50 words',look:'She has a growing collection of words she uses.',tip:'Keep naming everything; narrate your day out loud.'},
+      {t:'Says an action word in a phrase, like “Doggie run”',look:'He pairs a thing with an action word.',tip:'Describe actions as they happen — “doggie runs!”'},
+      {t:'Names things in a book when you point and ask',look:'She names pictures you point to.',tip:'Pause on each picture and ask “what is this?”'},
+      {t:'Uses words like “I,” “me,” or “we”',look:'He starts using little words for himself.',tip:'Model them — “I do it,” “we go” — in everyday talk.'}
+    ],
+    thinking:[
+      {t:'Uses things to pretend, like feeding a block to a doll',look:'She makes one thing stand for another in play.',tip:'Join her pretend — “is dolly hungry?”'},
+      {t:'Solves simple problems, like standing on a stool to reach',look:'He figures out a way to get what he wants.',tip:'Let him puzzle it out a moment before stepping in to help.'},
+      {t:'Follows two-step instructions',look:'She does both parts of “get your shoes and come here.”',tip:'Give two-step jobs during the day and thank her.'},
+      {t:'Knows at least one colour',look:'He names or points to a colour correctly.',tip:'Name colours as you go — “red apple, red cup.”'}
+    ],
+    social:[
+      {t:'Plays alongside other children, sometimes with them',look:'She plays near other kids and sometimes joins in.',tip:'Set up easy side-by-side play with simple shared toys.'},
+      {t:'Shows you what she can do — “Look at me!”',look:'He calls you over to watch his new tricks.',tip:'Stop and watch; your attention is the reward.'}
+    ],
+    everyday:[
+      {t:'Takes off some clothes by himself, like loose pants',look:'She pulls off easy clothes on her own.',tip:'Choose loose, elastic clothes she can manage.'}
+    ]
   },
   activities:{
     reading:['Ask “What is this?” on each page to grow vocabulary','Read counting and colour books','Talk about what might happen next in the story'],
@@ -489,12 +644,33 @@ const STAGES=[
   }},
 { id:'30-36', lo:30, hi:36, short:'30–36', label:'30 to 36 months',
   milestones:{
-    moving:['Climbs and runs with ease','Pedals a tricycle or ride-on toy'],
-    hands:['Strings large beads or macaroni together','Draws a circle when you show him how'],
-    talking:['Has a back-and-forth chat with at least two exchanges','Asks “who,” “what,” “where,” or “why” questions','Says what is happening in a picture, like “running” or “eating”','Says her first name when asked','Speaks clearly enough for others to understand most of the time'],
-    thinking:['Avoids touching hot objects when you warn her','Matches and sorts objects by shape or colour'],
-    social:['Calms down within about 10 minutes after you say goodbye','Notices other children and joins them to play'],
-    everyday:['Puts on some clothes by himself, like loose pants or a jacket','Uses a fork']
+    moving:[
+      {t:'Climbs and runs with ease',look:'He moves confidently — climbing and running smoothly.',tip:'Visit playgrounds for safe climbing and running.'},
+      {t:'Pedals a tricycle or ride-on toy',look:'She pushes the pedals to move a trike forward.',tip:'Start on a flat, smooth surface and guide her feet.'}
+    ],
+    hands:[
+      {t:'Strings large beads or macaroni together',look:'He threads big beads onto a string or lace.',tip:'Use chunky beads and a stiff lace to start.'},
+      {t:'Draws a circle when you show him how',look:'She copies a rough circle after you draw one.',tip:'Draw a circle slowly and invite her to try.'}
+    ],
+    talking:[
+      {t:'Has a back-and-forth chat with at least two exchanges',look:'He answers and adds on, keeping a little chat going.',tip:'Ask open questions and wait for his reply.'},
+      {t:'Asks “who,” “what,” “where,” or “why” questions',look:'She asks real questions to learn more.',tip:'Answer warmly and ask questions back.'},
+      {t:'Says what is happening in a picture, like “running” or “eating”',look:'He describes the action in a picture.',tip:'Ask “what is happening here?” as you read.'},
+      {t:'Says her first name when asked',look:'She tells you her name.',tip:'Play “what is your name?” as a happy game.'},
+      {t:'Speaks clearly enough for others to understand most of the time',look:'People outside the family understand much of what he says.',tip:'Repeat his words back clearly, never correcting harshly.'}
+    ],
+    thinking:[
+      {t:'Avoids touching hot objects when you warn her',look:'She holds back from things you have warned are hot.',tip:'Say “hot!” consistently near the stove or a mug.'},
+      {t:'Matches and sorts objects by shape or colour',look:'He groups things that go together.',tip:'Sort laundry, blocks, or toys by colour together.'}
+    ],
+    social:[
+      {t:'Calms down within about 10 minutes after you say goodbye',look:'She settles fairly soon after a goodbye.',tip:'Keep goodbyes short, warm, and predictable.'},
+      {t:'Notices other children and joins them to play',look:'He approaches other kids to play with them.',tip:'Offer chances to play with peers regularly.'}
+    ],
+    everyday:[
+      {t:'Puts on some clothes by himself, like loose pants or a jacket',look:'She pulls on easy clothes herself.',tip:'Lay clothes out and let her have a go first.'},
+      {t:'Uses a fork',look:'He spears soft food and eats with a fork.',tip:'Offer a toddler fork with soft, pierce-able foods.'}
+    ]
   },
   activities:{
     reading:['Ask “why” and “what happens next” questions','Let her “read” the story back in her own words','Visit the library and choose books together'],
@@ -510,6 +686,7 @@ let view='now';
 let curStage=0;
 let sub='milestones';
 let openSecs={};            // which sections are expanded (per stage+sub)
+let openInfo={};            // which milestone "more info" panels are expanded
 let editingId=null;         // child id being edited (null = adding)
 let pickColor=COLOR_KEYS[0];
 
@@ -681,18 +858,26 @@ function renderStages(){
   }
 
   if(sub==='milestones'){
-    body.innerHTML = DOMAINS.map(d=>{
+    body.innerHTML = `<div class="tap-hint">Tap any milestone to see what it looks like and gentle ideas to try.</div>` + DOMAINS.map(d=>{
       const items=mItems(curStage,d.key);
       const done=domainDone(curStage,d.key), total=items.length;
       const okey=curStage+'m'+d.key;
-      const open=openSecs[okey];
-      const rows=items.map((tx,i)=>{
+      const open=openSecs[okey]!==false;
+      const rows=items.map((m,i)=>{
         const id=mId(curStage,d.key,i);
-        return `<div class="item ${isOn(id)?'done':''}" data-hue="${d.hue}" data-id="${id}" onclick="toggle('${id}',true,'${d.key}')">
-          <span class="box"></span><span class="tx">${esc(tx)}</span></div>`;
+        const oi=!!openInfo[id];
+        return `<div class="item ${isOn(id)?'done':''} ${oi?'expanded':''}" data-hue="${d.hue}" data-id="${id}">
+          <button class="check" aria-label="Mark done" onclick="toggle('${id}',true,'${d.key}')"><span class="box"></span></button>
+          <div class="body" onclick="toggleInfo('${id}')">
+            <div class="tx-row"><span class="tx">${esc(m.t)}</span><span class="info-ico">${oi?'✕':'ⓘ'}</span></div>
+            <div class="more"><div class="more-in">
+              <p><span class="ml">What it looks like</span>${esc(m.look)}</p>
+              <p><span class="ml">If not yet, try</span>${esc(m.tip)}</p>
+            </div></div>
+          </div></div>`;
       }).join('');
       return `<div class="sec ${open?'open':''}" data-hue="${d.hue}">
-        <div class="sec-head" onclick="toggleSec('${okey}')">
+        <div class="sec-head" onclick="toggleSec('${okey}',true)">
           <span class="sec-badge">${d.emoji}</span>
           <span class="sec-title"><span class="t">${d.label}</span><span class="c">${d.sub}</span></span>
           ${ring(done,total)}
@@ -714,8 +899,9 @@ function renderStages(){
       const open=openSecs[okey]!==false; // activities default open
       const rows=items.map((tx,i)=>{
         const id=aId(curStage,g.key,i);
-        return `<div class="item ${isOn(id)?'done':''}" data-hue="${g.hue}" data-id="${id}" onclick="toggle('${id}',false)">
-          <span class="box"></span><span class="tx">${esc(tx)}</span></div>`;
+        return `<div class="item act ${isOn(id)?'done':''}" data-hue="${g.hue}" data-id="${id}" onclick="toggle('${id}',false)">
+          <span class="check"><span class="box"></span></span>
+          <div class="body"><div class="tx-row"><span class="tx">${esc(tx)}</span></div></div></div>`;
       }).join('');
       return `<div class="sec ${open?'open':''}" data-hue="${g.hue}">
         <div class="sec-head" onclick="toggleSec('${okey}',true)">
@@ -756,6 +942,7 @@ function toggleSec(key,defOpen){
   render();
 }
 function goCurrentStage(){ showView('stages'); }
+function toggleInfo(id){ openInfo[id]=!openInfo[id]; render(); }
 
 function toggle(id,isM,dk){
   const c=active(); if(!c) return;

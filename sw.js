@@ -1,5 +1,5 @@
 // Bloom service worker — network-first with cache fallback (offline-capable PWA)
-const CACHE = 'bloom-v1';
+const CACHE = 'bloom-v2';
 const ASSETS = [
   './',
   './index.html',
