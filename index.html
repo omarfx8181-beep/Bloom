@@ -6,31 +6,32 @@
 <title>Bloom — Milestone Tracker</title>
 <meta name="description" content="A gentle milestone tracker for your little one — CDC-aligned milestones and matching play activities from 6 months to 3 years.">
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#171320">
+<meta name="theme-color" content="#fbf6fb">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Bloom">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#171320;
-  --bg2:#1f1830;
-  --card:#241c33;
-  --card-soft:rgba(255,255,255,.05);
-  --line:rgba(255,255,255,.09);
-  --ink:#f6f2ff;
-  --dim:#b3a8cf;
-  --dim2:#8d83a8;
-  --rose:#ff8fb1;
+  /* Light theme — soft, airy cream/white with rose→lavender accents */
+  --bg:#fbf6fb;
+  --bg2:#ffffff;
+  --card:#ffffff;
+  --card-soft:rgba(122,95,201,.06);
+  --line:rgba(86,62,120,.13);
+  --ink:#352b49;
+  --dim:#6c6188;
+  --dim2:#9a90b4;
+  --rose:#ef5f8c;
   --peach:#ffb38a;
   --sage:#8fe0bb;
-  --lav:#bba6f2;
+  --lav:#7a5fc9;
   --sky:#8fcdf0;
   --butter:#ffd98a;
-  --grad-soft:linear-gradient(135deg,#ff8fb1,#bba6f2);
+  --grad-soft:linear-gradient(135deg,#e85c8c,#8a6fd0);
   --grad-rose:linear-gradient(135deg,#ff9ebf,#ff7aa2);
   --grad-peach:linear-gradient(135deg,#ffc59a,#ff9d76);
   --grad-sage:linear-gradient(135deg,#9fe9c6,#5fcfa0);
@@ -64,7 +65,7 @@ header .leaf{font-size:30px;}
 
 .card{
   background:var(--card);border:1px solid var(--line);border-radius:24px;
-  box-shadow:0 12px 30px rgba(0,0,0,.28);padding:18px 18px;margin-bottom:16px;
+  box-shadow:0 10px 28px rgba(123,97,160,.12);padding:18px 18px;margin-bottom:16px;
 }
 
 /* ---- child chips ---- */
@@ -81,7 +82,7 @@ header .leaf{font-size:30px;}
   transition:transform .15s;
 }
 .chip:active .av{transform:scale(.93);}
-.chip.on .av{border-color:var(--ink);box-shadow:0 0 0 3px rgba(255,255,255,.12),0 8px 18px rgba(0,0,0,.3);}
+.chip.on .av{border-color:var(--ink);box-shadow:0 0 0 3px rgba(122,95,201,.18),0 8px 18px rgba(123,97,160,.2);}
 .chip .nm{font-size:12px;font-weight:600;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .chip.on .nm{color:var(--ink);}
 .chip.add .av{background:var(--card-soft);border:2px dashed var(--line);color:var(--dim);font-size:26px;font-weight:400;}
@@ -92,7 +93,7 @@ header .leaf{font-size:30px;}
 .ruler-head .age{color:var(--dim);font-size:13px;font-weight:600;}
 .ruler{position:relative;margin:30px 2px 8px;}
 .ruler .track{display:flex;height:14px;border-radius:99px;overflow:hidden;border:1px solid var(--line);}
-.ruler .seg{flex:1;border-right:1px solid rgba(23,19,32,.55);opacity:.32;transition:opacity .3s;}
+.ruler .seg{flex:1;border-right:1px solid rgba(255,255,255,.6);opacity:.32;transition:opacity .3s;}
 .ruler .seg:last-child{border-right:none;}
 .ruler .seg.cur{opacity:1;}
 .ruler .track.live .seg{background:var(--grad-ruler);background-size:600% 100%;}
@@ -156,7 +157,7 @@ header .leaf{font-size:30px;}
   flex:1;border:none;background:none;color:var(--dim);font-family:inherit;font-weight:700;font-size:14px;
   padding:11px;border-radius:12px;cursor:pointer;transition:.2s;
 }
-.subtabs button.on{background:var(--card);color:var(--ink);box-shadow:0 4px 12px rgba(0,0,0,.25);}
+.subtabs button.on{background:var(--card);color:var(--ink);box-shadow:0 4px 12px rgba(123,97,160,.14);}
 
 /* ---- domain / group sections ---- */
 .sec{margin-bottom:14px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);}
@@ -218,7 +219,7 @@ header .leaf{font-size:30px;}
 .set-child .meta span{display:block;font-size:12px;color:var(--dim);margin-top:1px;}
 .mini{border:1px solid var(--line);background:var(--card-soft);color:var(--dim);border-radius:12px;padding:8px 12px;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;}
 .mini:active{transform:scale(.95);}
-.mini.danger{color:#ff9eb0;border-color:rgba(255,143,177,.3);}
+.mini.danger{color:#dd4f6e;border-color:rgba(221,79,110,.35);}
 .set-row{display:flex;gap:10px;margin-top:12px;}
 .set-row button{flex:1;border-radius:16px;padding:14px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--line);background:var(--card-soft);color:var(--ink);}
 .set-row button:active{transform:scale(.98);}
@@ -227,8 +228,8 @@ header .leaf{font-size:30px;}
 /* ---- tabs ---- */
 .tabs{
   position:fixed;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));
-  display:flex;gap:4px;background:rgba(36,28,51,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border:1px solid var(--line);border-radius:99px;padding:6px;z-index:40;box-shadow:0 14px 34px rgba(0,0,0,.4);
+  display:flex;gap:4px;background:rgba(255,255,255,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:99px;padding:6px;z-index:40;box-shadow:0 14px 34px rgba(123,97,160,.18);
 }
 .tabs button{
   border:none;background:none;color:var(--dim);font-family:inherit;font-weight:700;font-size:13.5px;
@@ -237,7 +238,7 @@ header .leaf{font-size:30px;}
 .tabs button.on{background:var(--grad-soft);color:#2a1838;}
 
 /* ---- overlay / modal ---- */
-.overlay{position:fixed;inset:0;background:rgba(10,7,18,.66);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+.overlay{position:fixed;inset:0;background:rgba(45,35,65,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   display:none;align-items:flex-end;justify-content:center;z-index:60;}
 .overlay.on{display:flex;}
 .modal{
@@ -256,16 +257,16 @@ header .leaf{font-size:30px;}
 .field input:focus{outline:none;border-color:var(--lav);}
 .swatches{display:flex;gap:10px;margin-top:8px;}
 .sw{width:38px;height:38px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;}
-.sw.on{border-color:var(--ink);box-shadow:0 0 0 3px rgba(255,255,255,.14);}
+.sw.on{border-color:var(--ink);box-shadow:0 0 0 3px rgba(122,95,201,.2);}
 .mrow{display:flex;gap:10px;margin-top:8px;}
 .btn-cancel{flex:1;background:none;border:1.5px solid var(--line);color:var(--dim);border-radius:16px;padding:15px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;}
 .btn-save{flex:1.4;border:none;border-radius:16px;padding:15px;font-family:inherit;font-weight:700;font-size:15px;color:#2a1838;background:var(--grad-soft);cursor:pointer;box-shadow:0 8px 20px rgba(187,166,242,.3);}
 .btn-save:active,.btn-cancel:active{transform:scale(.98);}
 
 /* ---- celebrate ---- */
-.celebrate{position:fixed;inset:0;background:rgba(10,7,18,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:80;padding:24px;}
+.celebrate{position:fixed;inset:0;background:rgba(45,35,65,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:80;padding:24px;}
 .celebrate.on{display:flex;}
-.cele-card{text-align:center;background:var(--bg2);border:1px solid var(--line);border-radius:28px;padding:34px 28px;max-width:340px;animation:bounceIn .65s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 60px rgba(0,0,0,.5);}
+.cele-card{text-align:center;background:var(--bg2);border:1px solid var(--line);border-radius:28px;padding:34px 28px;max-width:340px;animation:bounceIn .65s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 60px rgba(123,97,160,.22);}
 @keyframes bounceIn{0%{transform:scale(.3);opacity:0;}60%{transform:scale(1.08);opacity:1;}100%{transform:scale(1);}}
 .cele-card .em{font-size:60px;}
 .cele-card h2{margin:10px 0 6px;font-size:24px;font-weight:800;background:var(--grad-soft);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
@@ -279,7 +280,7 @@ header .leaf{font-size:30px;}
    Readability & "tap for more" upgrades
    (soft body font, larger type, stronger contrast, bigger taps)
    ============================================================ */
-:root{--dim:#cbc2e6;--dim2:#aaa0c8;}
+:root{--dim:#6c6188;--dim2:#9a90b4;}
 body{font-family:'Nunito',system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.5;}
 h1,.welcome h2,.modal h3,.cele-card h2,.sec-title .t,.now-foot .nf b,.ruler-head .who{
   font-family:'Outfit','Nunito',sans-serif;
@@ -767,12 +768,12 @@ function gItems(si,gk){ return STAGES[si].activities[gk]||[]; }
 function ring(done,total,color){
   const r=14,c=2*Math.PI*r,frac=total?done/total:0;
   const off=c*(1-frac);
-  const col=total&&done===total?'#9fe9c6':'#bba6f2';
+  const col=total&&done===total?'#4cc79a':'#8a6fd0';
   return `<svg class="sec-ring" viewBox="0 0 34 34">
-    <circle cx="17" cy="17" r="${r}" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3.5"/>
+    <circle cx="17" cy="17" r="${r}" fill="none" stroke="rgba(86,62,120,.14)" stroke-width="3.5"/>
     <circle cx="17" cy="17" r="${r}" fill="none" stroke="${col}" stroke-width="3.5" stroke-linecap="round"
       stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 17 17)"/>
-    <text x="17" y="21" text-anchor="middle" font-size="10" font-weight="700" fill="#f6f2ff">${done}</text>
+    <text x="17" y="21" text-anchor="middle" font-size="10" font-weight="700" fill="#352b49">${done}</text>
   </svg>`;
 }
 

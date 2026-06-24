@@ -30,7 +30,7 @@ python3 -m http.server 8000
 # then open http://localhost:8000
 ```
 
-After editing, hard-refresh; the service worker is network-first so changes show up on reload. If caching gets sticky, bump the `CACHE` version suffix in `sw.js` (currently `bloom-v2`) to force old caches to purge on activate.
+After editing, hard-refresh; the service worker is network-first so changes show up on reload. If caching gets sticky, bump the `CACHE` version suffix in `sw.js` (currently `bloom-v3`) to force old caches to purge on activate.
 
 ## Key implementation details
 
