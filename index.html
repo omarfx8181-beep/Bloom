@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<title>Bloom — Milestone Tracker</title>
+<meta name="description" content="A gentle milestone tracker for your little one — CDC-aligned milestones and matching play activities from 6 months to 3 years.">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#171320">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bloom">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#171320;
+  --bg2:#1f1830;
+  --card:#241c33;
+  --card-soft:rgba(255,255,255,.05);
+  --line:rgba(255,255,255,.09);
+  --ink:#f6f2ff;
+  --dim:#b3a8cf;
+  --dim2:#8d83a8;
+  --rose:#ff8fb1;
+  --peach:#ffb38a;
+  --sage:#8fe0bb;
+  --lav:#bba6f2;
+  --sky:#8fcdf0;
+  --butter:#ffd98a;
+  --grad-soft:linear-gradient(135deg,#ff8fb1,#bba6f2);
+  --grad-rose:linear-gradient(135deg,#ff9ebf,#ff7aa2);
+  --grad-peach:linear-gradient(135deg,#ffc59a,#ff9d76);
+  --grad-sage:linear-gradient(135deg,#9fe9c6,#5fcfa0);
+  --grad-lav:linear-gradient(135deg,#c9b6ff,#9d86ec);
+  --grad-sky:linear-gradient(135deg,#a6dbf5,#6fb8e8);
+  --grad-butter:linear-gradient(135deg,#ffe1a0,#ffc24f);
+  --grad-ruler:linear-gradient(90deg,#ff8fb1,#ffb38a,#ffd98a,#8fe0bb,#8fcdf0,#bba6f2);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Outfit',system-ui,-apple-system,sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%,rgba(187,166,242,.16),transparent 60%),
+    radial-gradient(1000px 500px at -10% 10%,rgba(255,143,177,.14),transparent 55%),
+    var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  padding:max(26px,env(safe-area-inset-top)) 16px 122px;
+  max-width:540px;margin:0 auto;
+  -webkit-font-smoothing:antialiased;
+}
+header{text-align:center;margin:4px 0 18px;}
+h1{
+  font-size:40px;font-weight:800;margin:0;letter-spacing:-.5px;
+  background:var(--grad-soft);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+header .leaf{font-size:30px;}
+.sub{color:var(--dim);font-size:13.5px;margin-top:3px;font-weight:500;}
+
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:24px;
+  box-shadow:0 12px 30px rgba(0,0,0,.28);padding:18px 18px;margin-bottom:16px;
+}
+
+/* ---- child chips ---- */
+#childBar{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px;margin-bottom:6px;scrollbar-width:none;}
+#childBar::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:none;border:none;color:var(--dim);font-family:inherit;cursor:pointer;
+  width:64px;padding:0;
+}
+.chip .av{
+  width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
+  font-size:22px;font-weight:700;color:#2a1838;border:2.5px solid transparent;
+  transition:transform .15s;
+}
+.chip:active .av{transform:scale(.93);}
+.chip.on .av{border-color:var(--ink);box-shadow:0 0 0 3px rgba(255,255,255,.12),0 8px 18px rgba(0,0,0,.3);}
+.chip .nm{font-size:12px;font-weight:600;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.chip.on .nm{color:var(--ink);}
+.chip.add .av{background:var(--card-soft);border:2px dashed var(--line);color:var(--dim);font-size:26px;font-weight:400;}
+
+/* ---- ruler ---- */
+.ruler-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+.ruler-head .who{font-weight:700;font-size:18px;}
+.ruler-head .age{color:var(--dim);font-size:13px;font-weight:600;}
+.ruler{position:relative;margin:30px 2px 8px;}
+.ruler .track{display:flex;height:14px;border-radius:99px;overflow:hidden;border:1px solid var(--line);}
+.ruler .seg{flex:1;border-right:1px solid rgba(23,19,32,.55);opacity:.32;transition:opacity .3s;}
+.ruler .seg:last-child{border-right:none;}
+.ruler .seg.cur{opacity:1;}
+.ruler .track.live .seg{background:var(--grad-ruler);background-size:600% 100%;}
+.ruler .track.live .seg:nth-child(1){background-position:0% 0;}
+.ruler .track.live .seg:nth-child(2){background-position:20% 0;}
+.ruler .track.live .seg:nth-child(3){background-position:40% 0;}
+.ruler .track.live .seg:nth-child(4){background-position:60% 0;}
+.ruler .track.live .seg:nth-child(5){background-position:80% 0;}
+.ruler .track.live .seg:nth-child(6){background-position:100% 0;}
+.ruler .labels{display:flex;margin-top:7px;}
+.ruler .labels span{flex:1;text-align:center;font-size:10px;color:var(--dim2);font-weight:600;}
+.ruler .labels span.cur{color:var(--ink);}
+.ruler .pin{
+  position:absolute;top:-26px;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;transition:left .5s cubic-bezier(.22,1,.36,1);
+}
+.ruler .pin .tag{
+  background:var(--grad-rose);color:#3a1226;font-size:9.5px;font-weight:800;
+  padding:3px 8px;border-radius:99px;letter-spacing:.5px;box-shadow:0 6px 14px rgba(255,143,177,.4);
+}
+.ruler .pin .stem{width:2px;height:14px;background:var(--rose);}
+.ruler .pin .dot{width:13px;height:13px;border-radius:50%;background:var(--rose);border:2.5px solid var(--bg);box-shadow:0 0 0 2px var(--rose),0 0 14px rgba(255,143,177,.6);margin-top:-3px;}
+
+.now-foot{display:flex;gap:10px;margin-top:18px;}
+.now-foot .nf{flex:1;background:var(--card-soft);border:1px solid var(--line);border-radius:18px;padding:12px;text-align:center;}
+.now-foot .nf b{display:block;font-size:26px;font-weight:800;line-height:1;}
+.now-foot .nf span{font-size:11px;color:var(--dim);font-weight:600;}
+.go-stage{
+  width:100%;margin-top:14px;border:none;border-radius:18px;padding:15px;
+  font-family:inherit;font-weight:700;font-size:15px;color:#2a1838;background:var(--grad-soft);
+  box-shadow:0 10px 24px rgba(187,166,242,.32);cursor:pointer;
+}
+.go-stage:active{transform:scale(.98);}
+
+/* ---- empty / welcome ---- */
+.welcome{text-align:center;padding:34px 22px;}
+.welcome .big{font-size:54px;margin-bottom:6px;}
+.welcome h2{margin:6px 0;font-size:22px;font-weight:800;}
+.welcome p{color:var(--dim);font-size:14px;line-height:1.55;margin:0 auto 20px;max-width:300px;}
+.btn-primary{
+  border:none;border-radius:18px;padding:15px 26px;font-family:inherit;font-weight:700;font-size:15.5px;
+  color:#2a1838;background:var(--grad-soft);box-shadow:0 12px 26px rgba(187,166,242,.34);cursor:pointer;
+}
+.btn-primary:active{transform:scale(.98);}
+
+/* ---- stage pills ---- */
+.stage-pills{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none;}
+.stage-pills::-webkit-scrollbar{display:none;}
+.spill{
+  flex:0 0 auto;border:1px solid var(--line);background:var(--card-soft);color:var(--dim);
+  border-radius:99px;padding:9px 15px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;
+  transition:transform .12s;white-space:nowrap;
+}
+.spill:active{transform:scale(.95);}
+.spill.on{background:var(--grad-soft);color:#2a1838;border-color:transparent;box-shadow:0 8px 18px rgba(187,166,242,.3);}
+.spill.now::after{content:"• now";font-size:10px;font-weight:800;margin-left:5px;opacity:.7;}
+
+/* ---- subtabs ---- */
+.subtabs{display:flex;gap:6px;background:var(--card-soft);border:1px solid var(--line);border-radius:16px;padding:5px;margin-bottom:16px;}
+.subtabs button{
+  flex:1;border:none;background:none;color:var(--dim);font-family:inherit;font-weight:700;font-size:14px;
+  padding:11px;border-radius:12px;cursor:pointer;transition:.2s;
+}
+.subtabs button.on{background:var(--card);color:var(--ink);box-shadow:0 4px 12px rgba(0,0,0,.25);}
+
+/* ---- domain / group sections ---- */
+.sec{margin-bottom:14px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--card);}
+.sec-head{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer;}
+.sec-badge{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-size:20px;flex:0 0 auto;}
+.sec-title{flex:1;}
+.sec-title .t{font-weight:700;font-size:16px;}
+.sec-title .c{font-size:12px;color:var(--dim);font-weight:600;margin-top:1px;}
+.sec-ring{width:34px;height:34px;flex:0 0 auto;}
+.sec-body{padding:0 14px 8px;display:none;}
+.sec.open .sec-body{display:block;}
+.sec .chev{color:var(--dim2);font-size:13px;transition:transform .2s;margin-left:2px;}
+.sec.open .chev{transform:rotate(90deg);}
+
+.item{
+  display:flex;align-items:flex-start;gap:13px;padding:12px 8px;border-top:1px solid var(--line);
+  cursor:pointer;user-select:none;
+}
+.item:first-child{border-top:none;}
+.box{
+  flex:0 0 auto;width:26px;height:26px;border-radius:9px;border:2px solid var(--line);
+  background:var(--card-soft);margin-top:1px;position:relative;transition:transform .15s;
+}
+.box::after{
+  content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#241531;font-weight:800;
+  font-size:16px;opacity:0;transform:scale(.4);transition:.2s;
+}
+.item.done .box::after{opacity:1;transform:scale(1);}
+.item .tx{font-size:14.5px;line-height:1.4;color:var(--ink);padding-top:3px;}
+.item.done .tx{color:var(--dim);}
+.box.pop{animation:popIn .5s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{0%{transform:scale(1);}40%{transform:scale(1.28) rotate(5deg);}70%{transform:scale(.92);}100%{transform:scale(1);}}
+
+/* per-domain accent colors applied via data-hue */
+[data-hue=peach] .sec-badge{background:rgba(255,179,138,.18);}
+[data-hue=peach].item.done .box,[data-hue=peach] .item.done .box{background:var(--grad-peach);border-color:transparent;}
+[data-hue=lav] .sec-badge{background:rgba(187,166,242,.2);}
+[data-hue=sky] .sec-badge{background:rgba(143,205,240,.18);}
+[data-hue=butter] .sec-badge{background:rgba(255,217,138,.18);}
+[data-hue=rose] .sec-badge{background:rgba(255,143,177,.18);}
+[data-hue=sage] .sec-badge{background:rgba(143,224,187,.18);}
+
+.note-wrap{margin:14px 2px 4px;}
+.note-wrap label{font-size:12.5px;color:var(--dim);font-weight:600;margin-left:4px;}
+.note-wrap textarea{
+  width:100%;margin-top:6px;background:var(--card-soft);border:1px solid var(--line);border-radius:16px;
+  color:var(--ink);font-family:inherit;font-size:14px;padding:13px 15px;resize:vertical;min-height:64px;
+}
+.note-wrap textarea:focus{outline:none;border-color:var(--lav);}
+
+.disclaim{font-size:11.5px;color:var(--dim2);text-align:center;line-height:1.5;margin:8px 6px 0;padding:0 8px;}
+
+/* ---- settings ---- */
+.set-child{display:flex;align-items:center;gap:13px;padding:13px 4px;border-top:1px solid var(--line);}
+.set-child:first-of-type{border-top:none;}
+.set-child .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#2a1838;font-size:18px;flex:0 0 auto;}
+.set-child .meta{flex:1;}
+.set-child .meta b{font-size:15px;}
+.set-child .meta span{display:block;font-size:12px;color:var(--dim);margin-top:1px;}
+.mini{border:1px solid var(--line);background:var(--card-soft);color:var(--dim);border-radius:12px;padding:8px 12px;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;}
+.mini:active{transform:scale(.95);}
+.mini.danger{color:#ff9eb0;border-color:rgba(255,143,177,.3);}
+.set-row{display:flex;gap:10px;margin-top:12px;}
+.set-row button{flex:1;border-radius:16px;padding:14px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;border:1px solid var(--line);background:var(--card-soft);color:var(--ink);}
+.set-row button:active{transform:scale(.98);}
+.set-h{font-size:13px;color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin:4px 4px 10px;}
+
+/* ---- tabs ---- */
+.tabs{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom));
+  display:flex;gap:4px;background:rgba(36,28,51,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);border-radius:99px;padding:6px;z-index:40;box-shadow:0 14px 34px rgba(0,0,0,.4);
+}
+.tabs button{
+  border:none;background:none;color:var(--dim);font-family:inherit;font-weight:700;font-size:13.5px;
+  padding:11px 20px;border-radius:99px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:6px;
+}
+.tabs button.on{background:var(--grad-soft);color:#2a1838;}
+
+/* ---- overlay / modal ---- */
+.overlay{position:fixed;inset:0;background:rgba(10,7,18,.66);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:none;align-items:flex-end;justify-content:center;z-index:60;}
+.overlay.on{display:flex;}
+.modal{
+  width:100%;max-width:540px;background:var(--bg2);border:1px solid var(--line);
+  border-radius:28px 28px 0 0;padding:24px 22px max(26px,env(safe-area-inset-bottom));
+  animation:slideUp .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.modal h3{margin:2px 0 18px;font-size:20px;font-weight:800;text-align:center;}
+.field{margin-bottom:15px;}
+.field label{font-size:12.5px;color:var(--dim);font-weight:600;margin-left:4px;}
+.field input{
+  width:100%;margin-top:6px;background:var(--card-soft);border:1px solid var(--line);border-radius:15px;
+  color:var(--ink);font-family:inherit;font-size:16px;padding:14px 15px;
+}
+.field input:focus{outline:none;border-color:var(--lav);}
+.swatches{display:flex;gap:10px;margin-top:8px;}
+.sw{width:38px;height:38px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;}
+.sw.on{border-color:var(--ink);box-shadow:0 0 0 3px rgba(255,255,255,.14);}
+.mrow{display:flex;gap:10px;margin-top:8px;}
+.btn-cancel{flex:1;background:none;border:1.5px solid var(--line);color:var(--dim);border-radius:16px;padding:15px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;}
+.btn-save{flex:1.4;border:none;border-radius:16px;padding:15px;font-family:inherit;font-weight:700;font-size:15px;color:#2a1838;background:var(--grad-soft);cursor:pointer;box-shadow:0 8px 20px rgba(187,166,242,.3);}
+.btn-save:active,.btn-cancel:active{transform:scale(.98);}
+
+/* ---- celebrate ---- */
+.celebrate{position:fixed;inset:0;background:rgba(10,7,18,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:80;padding:24px;}
+.celebrate.on{display:flex;}
+.cele-card{text-align:center;background:var(--bg2);border:1px solid var(--line);border-radius:28px;padding:34px 28px;max-width:340px;animation:bounceIn .65s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 60px rgba(0,0,0,.5);}
+@keyframes bounceIn{0%{transform:scale(.3);opacity:0;}60%{transform:scale(1.08);opacity:1;}100%{transform:scale(1);}}
+.cele-card .em{font-size:60px;}
+.cele-card h2{margin:10px 0 6px;font-size:24px;font-weight:800;background:var(--grad-soft);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.cele-card p{color:var(--dim);font-size:15px;margin:0;line-height:1.5;}
+.confetti{position:fixed;top:-24px;border-radius:3px;pointer-events:none;z-index:79;}
+@keyframes fall{to{transform:translateY(112vh) rotate(var(--r));}}
+
+.hide{display:none!important;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Bloom</h1>
+  <div class="sub" id="hdrSub">A gentle little milestone tracker 🌸</div>
+</header>
+
+<!-- ============ NOW ============ -->
+<section id="viewNow">
+  <div id="childBar"></div>
+
+  <div class="card" id="welcomeCard">
+    <div class="welcome">
+      <div class="big">🌷</div>
+      <h2>Welcome to Bloom</h2>
+      <p>Track your little one's milestones and playful ways to help them grow — gently, lovingly, all in one place.</p>
+      <button class="btn-primary" onclick="openChild()">＋ Add your little one</button>
+    </div>
+  </div>
+
+  <div class="card hide" id="rulerCard">
+    <div class="ruler-head">
+      <div class="who" id="rWho">—</div>
+      <div class="age" id="rAge"></div>
+    </div>
+    <div class="ruler" id="ruler"></div>
+    <div class="now-foot" id="nowFoot"></div>
+    <button class="go-stage" id="goStage" onclick="goCurrentStage()">Open this stage →</button>
+  </div>
+</section>
+
+<!-- ============ STAGES ============ -->
+<section id="viewStages" class="hide">
+  <div class="stage-pills" id="stagePills"></div>
+  <div class="subtabs">
+    <button id="subMile" class="on" onclick="setSub('milestones')">Milestones</button>
+    <button id="subPlay" onclick="setSub('play')">Learn &amp; play</button>
+  </div>
+  <div id="stageBody"></div>
+  <div class="disclaim" id="stageDisclaim"></div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<section id="viewSettings" class="hide">
+  <div class="card">
+    <div class="set-h">Little ones</div>
+    <div id="childList"></div>
+    <div class="set-row"><button onclick="openChild()">＋ Add a child</button></div>
+  </div>
+  <div class="card">
+    <div class="set-h">Backup</div>
+    <div class="set-row">
+      <button onclick="exportData()">⬇︎ Export</button>
+      <button onclick="document.getElementById('importFile').click()">⬆︎ Import</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json" class="hide" onchange="importData(event)">
+    <div class="set-row"><button class="mini danger" style="flex:1;padding:14px" onclick="resetAll()">Reset everything</button></div>
+  </div>
+  <div class="disclaim">Bloom is a loving keepsake and encouragement tool, not medical advice. Every child grows at their own pace — milestone ranges are based on the CDC's “Learn the Signs. Act Early.” program. If you ever have concerns, talk with your pediatrician.</div>
+</section>
+
+<!-- bottom tabs -->
+<nav class="tabs">
+  <button id="tabNow" class="on" onclick="showView('now')">🏡 Now</button>
+  <button id="tabStages" onclick="showView('stages')">🌱 Stages</button>
+  <button id="tabSettings" onclick="showView('settings')">⚙︎ Settings</button>
+</nav>
+
+<!-- child modal -->
+<div class="overlay" id="childOverlay">
+  <div class="modal">
+    <h3 id="cmTitle">Add your little one</h3>
+    <div class="field">
+      <label>Name</label>
+      <input id="cmName" type="text" placeholder="e.g. Emma" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Birthdate</label>
+      <input id="cmBirth" type="date">
+    </div>
+    <div class="field">
+      <label>Colour</label>
+      <div class="swatches" id="cmSwatches"></div>
+    </div>
+    <div class="mrow">
+      <button class="btn-cancel" onclick="closeChild()">Cancel</button>
+      <button class="btn-save" onclick="saveChild()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- celebrate -->
+<div class="celebrate" id="celebrate">
+  <div class="cele-card">
+    <div class="em" id="celeEm">🎉</div>
+    <h2 id="celeTitle">Yay!</h2>
+    <p id="celeMsg"></p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   Bloom — child development milestone tracker
+   Single-file PWA · localStorage · no deps
+   ============================================================ */
+const KEY='bloom';
+const MS=86400000;
+
+const COLORS={
+  rose:'linear-gradient(135deg,#ff9ebf,#ff7aa2)',
+  peach:'linear-gradient(135deg,#ffc59a,#ff9d76)',
+  sage:'linear-gradient(135deg,#9fe9c6,#5fcfa0)',
+  lav:'linear-gradient(135deg,#c9b6ff,#9d86ec)',
+  sky:'linear-gradient(135deg,#a6dbf5,#6fb8e8)',
+  butter:'linear-gradient(135deg,#ffe1a0,#ffc24f)'
+};
+const COLOR_KEYS=Object.keys(COLORS);
+
+const DOMAINS=[
+  {key:'moving',  label:'Moving',         emoji:'🦶', hue:'peach',  sub:'Gross motor'},
+  {key:'hands',   label:'Hands',          emoji:'✋', hue:'lav',    sub:'Fine motor'},
+  {key:'talking', label:'Talking',        emoji:'💬', hue:'sky',    sub:'Language'},
+  {key:'thinking',label:'Thinking',       emoji:'🧠', hue:'butter', sub:'Learning'},
+  {key:'social',  label:'Social',         emoji:'🫶', hue:'rose',   sub:'Social & emotional'},
+  {key:'everyday',label:'Everyday skills',emoji:'🍼', hue:'sage',   sub:'Self-help'}
+];
+const GROUPS=[
+  {key:'reading', label:'Daily reading',      emoji:'📖', hue:'sky'},
+  {key:'movement',label:'Movement play',      emoji:'🤸', hue:'peach'},
+  {key:'fine',    label:'Fine motor',         emoji:'🧩', hue:'lav'},
+  {key:'pretend', label:'Pretend & thinking', emoji:'🎭', hue:'butter'}
+];
+
+/* CDC "Learn the Signs. Act Early." (2022) milestones, remapped to six domains,
+   plus an age-matched Learn & play curriculum. Item order is stable — checks key off it. */
+const STAGES=[
+{ id:'6-9', lo:6, hi:9, short:'6–9', label:'6 to 9 months',
+  milestones:{
+    moving:['Sits without support','Gets into a sitting position on her own','Moves to reach a toy — rolling, rocking, or scooting'],
+    hands:['Moves things from one hand to the other','Rakes food toward himself with his fingers','Bangs two things together'],
+    talking:['Babbles long strings like “mamama” and “bababa”','Lifts arms up to be picked up'],
+    thinking:['Looks for objects when they drop out of sight','Watches the path of something as it falls'],
+    social:['Is shy, clingy, or fearful around strangers','Shows several expressions — happy, sad, angry, surprised','Looks over when you call her name','Reacts when you leave — looks, reaches, or cries','Smiles or laughs during peek-a-boo'],
+    everyday:['Brings food to her mouth with her fingers','Opens her mouth for the spoon when hungry']
+  },
+  activities:{
+    reading:['Read a sturdy board book together every day, even for a minute','Name each picture as you point to it','Let him hold and mouth the book — that counts as reading too'],
+    movement:['Give plenty of supervised tummy time with toys just out of reach','Play gentle peek-a-boo and pat-a-cake','Prop her up to practise sitting with cushions around'],
+    fine:['Offer two soft blocks to bang together','Roll a soft ball back and forth','Let him pick up large, soft finger foods'],
+    pretend:['Hide a toy under a cloth and find it together','Make funny faces and watch her try to copy you','Narrate your day in a warm, sing-song voice']
+  }},
+{ id:'9-12', lo:9, hi:12, short:'9–12', label:'9 to 12 months',
+  milestones:{
+    moving:['Pulls up to stand','Walks while holding on to furniture (“cruising”)'],
+    hands:['Picks up tiny things with thumb and pointer finger','Lets go of objects on purpose'],
+    talking:['Waves “bye-bye”','Calls a parent “mama,” “dada,” or a special name','Understands “no” — pauses or briefly stops'],
+    thinking:['Puts something into a container, like a block in a cup','Looks for things he sees you hide'],
+    social:['Plays games with you, like pat-a-cake'],
+    everyday:['Drinks from a cup without a lid as you hold it','Finger-feeds herself small bites']
+  },
+  activities:{
+    reading:['Read lift-the-flap books and let her open the flaps','Ask “Where’s the puppy?” and point together','Re-read her favourite book as often as she likes'],
+    movement:['Arrange safe, sturdy furniture to cruise along','Sit a little apart and cheer her crawl to you','Sway and dance together to music'],
+    fine:['Give a cup and blocks to drop in and dump out','Offer finger foods to practise the pincer pinch','Stack two blocks and let him knock them down'],
+    pretend:['Wave “bye-bye” every time someone leaves','Play hide-the-toy under a blanket','Hand her a toy phone and “chat” together']
+  }},
+{ id:'12-18', lo:12, hi:18, short:'12–18', label:'12 to 18 months',
+  milestones:{
+    moving:['Takes a few steps on his own','Walks without holding on to anyone','Climbs on and off a couch or chair without help'],
+    hands:['Stacks at least two small blocks','Scribbles with a crayon'],
+    talking:['Tries to say three or more words besides “mama”/“dada”','Follows a one-step direction without gestures, like “Give it to me”','Points to ask for something or get help'],
+    thinking:['Tries to use things the right way — a phone, cup, or book','Copies you doing chores, like sweeping','Plays with toys simply, like pushing a toy car'],
+    social:['Copies other children while playing','Shows you an object she likes','Points to show you something interesting','Looks at a few pages in a book with you'],
+    everyday:['Tries to use a spoon','Drinks from an open cup, with some spills','Helps with dressing by pushing an arm through a sleeve']
+  },
+  activities:{
+    reading:['Pause and let her fill in a word in a familiar book','Point to and name one thing on every page','Keep books low so she can choose her own'],
+    movement:['Clear safe space for new walkers to roam','Roll, kick, and chase a soft ball together','Let him climb safely while you spot him'],
+    fine:['Offer chunky crayons for first scribbles','Stack blocks together and count them out loud','Practise scooping with a spoon at mealtimes'],
+    pretend:['“Sweep,” “dust,” or “cook” with toy tools together','Push toy cars and animals around the floor','Name body parts during bath and dressing']
+  }},
+{ id:'18-24', lo:18, hi:24, short:'18–24', label:'18 to 24 months',
+  milestones:{
+    moving:['Runs','Kicks a ball','Walks up a few stairs, with or without help'],
+    hands:['Holds something in one hand while using the other — holds a jar and takes off the lid','Tries switches, knobs, and buttons on a toy'],
+    talking:['Says at least two words together, like “More milk”','Points to things in a book when you ask','Points to at least two body parts when asked','Uses more gestures — blowing a kiss, nodding yes'],
+    thinking:['Plays with more than one toy at a time, like putting toy food on a plate'],
+    social:['Notices when others are hurt or upset','Looks at your face to see how to react in a new situation'],
+    everyday:['Eats with a spoon','Helps undress himself']
+  },
+  activities:{
+    reading:['Ask “What’s that?” and wait for her to name pictures','Read books about feelings and daily routines','Let him turn the pages himself'],
+    movement:['Kick and toss balls in the yard or hallway','Climb stairs together holding the rail','Play a slow, giggly chase'],
+    fine:['Offer shape sorters and big-knob puzzles','Give toys with buttons, dials, and switches','Practise spoon-feeding thick foods like yogurt'],
+    pretend:['Feed and rock a doll or stuffed animal together','Name feelings out loud — “You’re happy!” “He’s sad.”','Set up a tiny tea party or toy kitchen']
+  }},
+{ id:'24-30', lo:24, hi:30, short:'24–30', label:'24 to 30 months',
+  milestones:{
+    moving:['Jumps off the ground with both feet'],
+    hands:['Twists things with her hands — doorknobs, lids','Turns book pages one at a time'],
+    talking:['Says about 50 words','Says an action word in a phrase, like “Doggie run”','Names things in a book when you point and ask','Uses words like “I,” “me,” or “we”'],
+    thinking:['Uses things to pretend, like feeding a block to a doll','Solves simple problems, like standing on a stool to reach','Follows two-step instructions','Knows at least one colour'],
+    social:['Plays alongside other children, sometimes with them','Shows you what she can do — “Look at me!”'],
+    everyday:['Takes off some clothes by himself, like loose pants']
+  },
+  activities:{
+    reading:['Ask “What is this?” on each page to grow vocabulary','Read counting and colour books','Talk about what might happen next in the story'],
+    movement:['Practise jumping with both feet off the floor','Play “Simon Says” with simple actions','Walk along a line or low curb holding hands'],
+    fine:['Offer jars and lids to twist open and closed','Let her turn the pages as you read','Stack and sort toys by colour'],
+    pretend:['Play pretend kitchen, doctor, or builder','Sort toys by colour and name each one','Give two-step jobs: “Get your shoe and bring it here”']
+  }},
+{ id:'30-36', lo:30, hi:36, short:'30–36', label:'30 to 36 months',
+  milestones:{
+    moving:['Climbs and runs with ease','Pedals a tricycle or ride-on toy'],
+    hands:['Strings large beads or macaroni together','Draws a circle when you show him how'],
+    talking:['Has a back-and-forth chat with at least two exchanges','Asks “who,” “what,” “where,” or “why” questions','Says what is happening in a picture, like “running” or “eating”','Says her first name when asked','Speaks clearly enough for others to understand most of the time'],
+    thinking:['Avoids touching hot objects when you warn her','Matches and sorts objects by shape or colour'],
+    social:['Calms down within about 10 minutes after you say goodbye','Notices other children and joins them to play'],
+    everyday:['Puts on some clothes by himself, like loose pants or a jacket','Uses a fork']
+  },
+  activities:{
+    reading:['Ask “why” and “what happens next” questions','Let her “read” the story back in her own words','Visit the library and choose books together'],
+    movement:['Ride a tricycle or scooter in a safe spot','Play catch with a larger, soft ball','Build a simple obstacle course to climb and jump'],
+    fine:['String beads or pasta onto a shoelace','Draw circles and lines side by side','Practise using a fork at meals'],
+    pretend:['Act out longer pretend stories with toys','Sort and match by shape, colour, and size','Play simple turn-taking games together']
+  }}
+];
+
+/* ---------- state ---------- */
+let db={v:1,activeChild:null,children:{}};
+let view='now';
+let curStage=0;
+let sub='milestones';
+let openSecs={};            // which sections are expanded (per stage+sub)
+let editingId=null;         // child id being edited (null = adding)
+let pickColor=COLOR_KEYS[0];
+
+/* ---------- persistence ---------- */
+function load(){
+  let raw=null;
+  try{ raw=localStorage.getItem(KEY); }catch(e){}
+  if(!raw){ db={v:1,activeChild:null,children:{}}; return; }
+  let d;
+  try{ d=JSON.parse(raw); }catch(e){ db={v:1,activeChild:null,children:{}}; return; }
+  // migration guard: normalise shape, fill any missing fields
+  if(!d || typeof d!=='object'){ db={v:1,activeChild:null,children:{}}; return; }
+  if(!d.children) d.children={};
+  for(const id in d.children){
+    const c=d.children[id];
+    if(!c.checks) c.checks={};
+    if(!c.notes) c.notes={};
+    if(!c.color || !COLORS[c.color]) c.color=COLOR_KEYS[0];
+    if(!c.name) c.name='Little one';
+    if(!c.birth) c.birth='';
+  }
+  if(!d.activeChild || !d.children[d.activeChild]){
+    const keys=Object.keys(d.children);
+    d.activeChild=keys.length?keys[0]:null;
+  }
+  d.v=1;
+  db=d;
+}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(db)); }catch(e){} }
+
+/* ---------- helpers ---------- */
+function active(){ return db.activeChild?db.children[db.activeChild]:null; }
+function uid(){ return 'c'+Math.floor(performance.now()*1000).toString(36)+Object.keys(db.children).length; }
+function ageMonths(birth){
+  if(!birth) return null;
+  const b=new Date(birth+'T00:00:00');
+  if(isNaN(b)) return null;
+  const n=new Date(); n.setHours(0,0,0,0);
+  return (n-b)/MS/30.4375;
+}
+function ageLabel(m){
+  if(m==null) return '';
+  if(m<0) return 'not yet born';
+  const mo=Math.floor(m+0.0001);
+  if(mo<24){ return mo+' month'+(mo===1?'':'s'); }
+  const y=Math.floor(mo/12), r=mo%12;
+  return y+' yr'+(y===1?'':'s')+(r?(' '+r+' mo'):'');
+}
+function stageOf(m){
+  if(m==null) return null;
+  for(let i=0;i<STAGES.length;i++){ if(m<STAGES[i].hi) return i; }
+  return STAGES.length-1;
+}
+function markerPct(m){
+  if(m==null) return 0;
+  for(let i=0;i<STAGES.length;i++){
+    const s=STAGES[i];
+    if(m<s.hi || i===STAGES.length-1){
+      const f=Math.max(0,Math.min(1,(m-s.lo)/(s.hi-s.lo)));
+      return ((i+f)/STAGES.length)*100;
+    }
+  }
+  return 0;
+}
+function mItems(si,dk){ return STAGES[si].milestones[dk]||[]; }
+function mId(si,dk,i){ return 'm:'+si+':'+dk+':'+i; }
+function aId(si,gk,i){ return 'a:'+si+':'+gk+':'+i; }
+function isOn(id){ const c=active(); return !!(c&&c.checks[id]); }
+function domainDone(si,dk){ const c=active(); if(!c) return 0; let n=0; mItems(si,dk).forEach((_,i)=>{ if(c.checks[mId(si,dk,i)]) n++; }); return n; }
+function domainTotal(si,dk){ return mItems(si,dk).length; }
+function stageDone(si){ let n=0; DOMAINS.forEach(d=>n+=domainDone(si,d.key)); return n; }
+function stageTotal(si){ let n=0; DOMAINS.forEach(d=>n+=domainTotal(si,d.key)); return n; }
+function domainComplete(si,dk){ return domainTotal(si,dk)>0 && domainDone(si,dk)===domainTotal(si,dk); }
+function stageComplete(si){ return stageDone(si)===stageTotal(si); }
+function gItems(si,gk){ return STAGES[si].activities[gk]||[]; }
+
+/* progress ring svg */
+function ring(done,total,color){
+  const r=14,c=2*Math.PI*r,frac=total?done/total:0;
+  const off=c*(1-frac);
+  const col=total&&done===total?'#9fe9c6':'#bba6f2';
+  return `<svg class="sec-ring" viewBox="0 0 34 34">
+    <circle cx="17" cy="17" r="${r}" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3.5"/>
+    <circle cx="17" cy="17" r="${r}" fill="none" stroke="${col}" stroke-width="3.5" stroke-linecap="round"
+      stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 17 17)"/>
+    <text x="17" y="21" text-anchor="middle" font-size="10" font-weight="700" fill="#f6f2ff">${done}</text>
+  </svg>`;
+}
+
+/* ---------- views ---------- */
+function showView(v){
+  view=v;
+  document.getElementById('viewNow').classList.toggle('hide',v!=='now');
+  document.getElementById('viewStages').classList.toggle('hide',v!=='stages');
+  document.getElementById('viewSettings').classList.toggle('hide',v!=='settings');
+  document.getElementById('tabNow').classList.toggle('on',v==='now');
+  document.getElementById('tabStages').classList.toggle('on',v==='stages');
+  document.getElementById('tabSettings').classList.toggle('on',v==='settings');
+  window.scrollTo(0,0);
+  render();
+}
+function render(){
+  renderChildBar();
+  if(view==='now') renderNow();
+  else if(view==='stages') renderStages();
+  else renderSettings();
+}
+
+function renderChildBar(){
+  const bar=document.getElementById('childBar');
+  const kids=Object.entries(db.children);
+  if(!kids.length){ bar.innerHTML=''; bar.style.display='none'; return; }
+  bar.style.display='flex';
+  bar.innerHTML = kids.map(([id,c])=>{
+    const init=(c.name||'?').trim().charAt(0).toUpperCase()||'?';
+    return `<button class="chip ${id===db.activeChild?'on':''}" onclick="pickChild('${id}')">
+      <span class="av" style="background:${COLORS[c.color]}">${init}</span>
+      <span class="nm">${esc(c.name)}</span></button>`;
+  }).join('') + `<button class="chip add" onclick="openChild()"><span class="av">＋</span><span class="nm">Add</span></button>`;
+}
+
+function renderNow(){
+  const c=active();
+  const wc=document.getElementById('welcomeCard'), rc=document.getElementById('rulerCard');
+  if(!c){ wc.classList.remove('hide'); rc.classList.add('hide'); return; }
+  wc.classList.add('hide'); rc.classList.remove('hide');
+  const age=ageMonths(c.birth);
+  const si=stageOf(age)??0;
+  document.getElementById('rWho').textContent=c.name;
+  document.getElementById('rAge').textContent=age!=null?ageLabel(age):'add a birthdate';
+
+  // ruler
+  const live=age!=null;
+  let segs='',labs='';
+  STAGES.forEach((s,i)=>{
+    segs+=`<div class="seg ${i===si&&live?'cur':''}"></div>`;
+    labs+=`<span class="${i===si&&live?'cur':''}">${s.short}</span>`;
+  });
+  const pin = live ? `<div class="pin" style="left:${markerPct(age).toFixed(1)}%"><div class="tag">NOW</div><div class="stem"></div><div class="dot"></div></div>` : '';
+  document.getElementById('ruler').innerHTML =
+    `${pin}<div class="track ${live?'live':''}">${segs}</div><div class="labels">${labs}</div>`;
+
+  // footer stats for current stage
+  const done=stageDone(si), total=stageTotal(si);
+  document.getElementById('nowFoot').innerHTML=
+    `<div class="nf"><b>${done}</b><span>milestones noted</span></div>
+     <div class="nf"><b>${total-done}</b><span>still to come</span></div>
+     <div class="nf"><b>${STAGES[si].short}</b><span>months · now</span></div>`;
+  document.getElementById('goStage').textContent='Open the '+STAGES[si].short+' month stage →';
+  curStage=si;
+}
+
+function renderStages(){
+  const c=active();
+  const age=c?ageMonths(c.birth):null;
+  const nowStage=stageOf(age);
+  // pills
+  document.getElementById('stagePills').innerHTML = STAGES.map((s,i)=>
+    `<button class="spill ${i===curStage?'on':''} ${i===nowStage?'now':''}" onclick="pickStage(${i})">${s.short} mo</button>`
+  ).join('');
+  document.getElementById('subMile').classList.toggle('on',sub==='milestones');
+  document.getElementById('subPlay').classList.toggle('on',sub==='play');
+
+  const body=document.getElementById('stageBody');
+  if(!c){
+    body.innerHTML=`<div class="card"><div class="welcome"><div class="big">🌼</div><h2>No child yet</h2><p>Add your little one to start noting milestones for the ${STAGES[curStage].label} stage.</p><button class="btn-primary" onclick="openChild()">＋ Add your little one</button></div></div>`;
+    document.getElementById('stageDisclaim').textContent='';
+    return;
+  }
+
+  if(sub==='milestones'){
+    body.innerHTML = DOMAINS.map(d=>{
+      const items=mItems(curStage,d.key);
+      const done=domainDone(curStage,d.key), total=items.length;
+      const okey=curStage+'m'+d.key;
+      const open=openSecs[okey];
+      const rows=items.map((tx,i)=>{
+        const id=mId(curStage,d.key,i);
+        return `<div class="item ${isOn(id)?'done':''}" data-hue="${d.hue}" data-id="${id}" onclick="toggle('${id}',true,'${d.key}')">
+          <span class="box"></span><span class="tx">${esc(tx)}</span></div>`;
+      }).join('');
+      return `<div class="sec ${open?'open':''}" data-hue="${d.hue}">
+        <div class="sec-head" onclick="toggleSec('${okey}')">
+          <span class="sec-badge">${d.emoji}</span>
+          <span class="sec-title"><span class="t">${d.label}</span><span class="c">${d.sub}</span></span>
+          ${ring(done,total)}
+          <span class="chev">▶</span>
+        </div>
+        <div class="sec-body">${rows}</div>
+      </div>`;
+    }).join('');
+    // per-stage note
+    const note=(c.notes&&c.notes[STAGES[curStage].id])||'';
+    body.innerHTML += `<div class="note-wrap"><label>A little note for this stage</label>
+      <textarea id="stageNote" placeholder="First steps, funny words, sweet moments…" oninput="saveNote()">${esc(note)}</textarea></div>`;
+    document.getElementById('stageDisclaim').textContent='Milestones reflect what most children do by the end of this age range (CDC). Children grow at their own pace.';
+  } else {
+    body.innerHTML = GROUPS.map(g=>{
+      const items=gItems(curStage,g.key);
+      let done=0; items.forEach((_,i)=>{ if(isOn(aId(curStage,g.key,i))) done++; });
+      const okey=curStage+'a'+g.key;
+      const open=openSecs[okey]!==false; // activities default open
+      const rows=items.map((tx,i)=>{
+        const id=aId(curStage,g.key,i);
+        return `<div class="item ${isOn(id)?'done':''}" data-hue="${g.hue}" data-id="${id}" onclick="toggle('${id}',false)">
+          <span class="box"></span><span class="tx">${esc(tx)}</span></div>`;
+      }).join('');
+      return `<div class="sec ${open?'open':''}" data-hue="${g.hue}">
+        <div class="sec-head" onclick="toggleSec('${okey}',true)">
+          <span class="sec-badge">${g.emoji}</span>
+          <span class="sec-title"><span class="t">${g.label}</span><span class="c">${done} of ${items.length} tried</span></span>
+          <span class="chev">▶</span>
+        </div>
+        <div class="sec-body">${rows}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('stageDisclaim').textContent='Gentle, age-matched ways to play and connect — there’s no need to do them all.';
+  }
+}
+
+function renderSettings(){
+  const list=document.getElementById('childList');
+  const kids=Object.entries(db.children);
+  if(!kids.length){ list.innerHTML=`<div style="color:var(--dim);font-size:14px;padding:6px 4px">No children yet.</div>`; return; }
+  list.innerHTML=kids.map(([id,c])=>{
+    const init=(c.name||'?').trim().charAt(0).toUpperCase()||'?';
+    const age=ageMonths(c.birth);
+    return `<div class="set-child">
+      <span class="av" style="background:${COLORS[c.color]}">${init}</span>
+      <span class="meta"><b>${esc(c.name)}</b><span>${age!=null?ageLabel(age):'no birthdate'}</span></span>
+      <button class="mini" onclick="openChild('${id}')">Edit</button>
+      <button class="mini danger" onclick="removeChild('${id}')">Remove</button>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- interactions ---------- */
+function pickChild(id){ db.activeChild=id; const a=ageMonths(db.children[id].birth); curStage=stageOf(a)??0; save(); render(); }
+function pickStage(i){ curStage=i; render(); }
+function setSub(s){ sub=s; render(); }
+function toggleSec(key,defOpen){
+  if(key in openSecs) openSecs[key]=!openSecs[key];
+  else openSecs[key]=defOpen?false:true; // activities start open → first tap closes
+  render();
+}
+function goCurrentStage(){ showView('stages'); }
+
+function toggle(id,isM,dk){
+  const c=active(); if(!c) return;
+  const wasStage=isM?stageComplete(curStage):false;
+  const wasDomain=isM&&dk?domainComplete(curStage,dk):false;
+  if(c.checks[id]) delete c.checks[id]; else c.checks[id]=1;
+  save();
+  render();
+  // pop the box
+  const el=document.querySelector('[data-id="'+id+'"] .box');
+  if(el){ el.classList.add('pop'); setTimeout(()=>el.classList.remove('pop'),520); }
+  if(navigator.vibrate) navigator.vibrate(18);
+  // celebrations (only when checking a milestone ON)
+  if(isM && c.checks[id]){
+    if(!wasStage && stageComplete(curStage)){
+      celebrate('🌟','Stage complete!',c.name+' reached every milestone for '+STAGES[curStage].short+' months. Incredible!');
+    } else if(dk && !wasDomain && domainComplete(curStage,dk)){
+      const dl=(DOMAINS.find(d=>d.key===dk)||{}).label||'';
+      celebrate('🌸','“'+dl+'” all done!','Every '+dl.toLowerCase()+' milestone noted for this stage. '+c.name+'’s blooming!');
+    }
+  }
+}
+
+function saveNote(){
+  const c=active(); if(!c) return;
+  const v=document.getElementById('stageNote').value;
+  if(!c.notes) c.notes={};
+  if(v.trim()) c.notes[STAGES[curStage].id]=v; else delete c.notes[STAGES[curStage].id];
+  save();
+}
+
+/* ---------- child modal ---------- */
+function openChild(id){
+  editingId=id||null;
+  const sw=document.getElementById('cmSwatches');
+  sw.innerHTML=COLOR_KEYS.map(k=>`<div class="sw" data-c="${k}" style="background:${COLORS[k]}" onclick="setColor('${k}')"></div>`).join('');
+  if(editingId){
+    const c=db.children[editingId];
+    document.getElementById('cmTitle').textContent='Edit '+c.name;
+    document.getElementById('cmName').value=c.name;
+    document.getElementById('cmBirth').value=c.birth;
+    pickColor=c.color;
+  } else {
+    document.getElementById('cmTitle').textContent='Add your little one';
+    document.getElementById('cmName').value='';
+    document.getElementById('cmBirth').value='';
+    pickColor=COLOR_KEYS[Object.keys(db.children).length%COLOR_KEYS.length];
+  }
+  setColor(pickColor);
+  document.getElementById('childOverlay').classList.add('on');
+  setTimeout(()=>document.getElementById('cmName').focus(),120);
+}
+function setColor(k){ pickColor=k; document.querySelectorAll('#cmSwatches .sw').forEach(s=>s.classList.toggle('on',s.dataset.c===k)); }
+function closeChild(){ document.getElementById('childOverlay').classList.remove('on'); }
+function saveChild(){
+  const name=document.getElementById('cmName').value.trim();
+  const birth=document.getElementById('cmBirth').value;
+  if(!name){ document.getElementById('cmName').focus(); return; }
+  if(editingId){
+    const c=db.children[editingId]; c.name=name; c.birth=birth; c.color=pickColor;
+  } else {
+    const id=uid();
+    db.children[id]={name,birth,color:pickColor,checks:{},notes:{}};
+    db.activeChild=id;
+    const a=ageMonths(birth); curStage=stageOf(a)??0;
+  }
+  save(); closeChild(); render();
+}
+function removeChild(id){
+  const c=db.children[id]; if(!c) return;
+  if(!confirm('Remove '+c.name+' and all their saved progress? This cannot be undone.')) return;
+  delete db.children[id];
+  if(db.activeChild===id){ const keys=Object.keys(db.children); db.activeChild=keys.length?keys[0]:null; }
+  save(); render();
+}
+
+/* ---------- backup ---------- */
+function exportData(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='bloom-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+function importData(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d||typeof d!=='object'||!d.children) throw 0;
+      localStorage.setItem(KEY,JSON.stringify(d));
+      load(); curStage=0; render();
+      alert('Backup restored 🌿');
+    }catch(e){ alert('Sorry — that file could not be read as a Bloom backup.'); }
+    ev.target.value='';
+  };
+  r.readAsText(f);
+}
+function resetAll(){
+  if(!confirm('Erase ALL children and progress? This cannot be undone.')) return;
+  if(!confirm('Really erase everything?')) return;
+  db={v:1,activeChild:null,children:{}}; save(); curStage=0; render();
+}
+
+/* ---------- celebrate ---------- */
+function celebrate(em,title,msg){
+  document.getElementById('celeEm').textContent=em;
+  document.getElementById('celeTitle').textContent=title;
+  document.getElementById('celeMsg').textContent=msg;
+  const c=document.getElementById('celebrate');
+  c.classList.add('on');
+  confettiBurst(em==='🌟'?150:80);
+  if(navigator.vibrate) navigator.vibrate([50,40,60]);
+  clearTimeout(celebrate._t);
+  celebrate._t=setTimeout(()=>c.classList.remove('on'),em==='🌟'?5200:3600);
+}
+document.getElementById('celebrate').addEventListener('click',function(){ this.classList.remove('on'); });
+function confettiBurst(n){
+  const cols=['#ff8fb1','#ffb38a','#ffd98a','#8fe0bb','#8fcdf0','#bba6f2'];
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');
+    p.className='confetti';
+    p.style.left=(Math.random()*100)+'vw';
+    p.style.background=cols[i%cols.length];
+    const sz=6+Math.random()*7;
+    p.style.width=sz+'px'; p.style.height=(sz+Math.random()*6)+'px';
+    if(Math.random()<.5) p.style.borderRadius='50%';
+    p.style.animation='fall '+(2.2+Math.random()*1.9)+'s linear '+(Math.random()*.6)+'s forwards';
+    p.style.setProperty('--r',(Math.random()*820-410)+'deg');
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),5400);
+  }
+}
+
+/* ---------- utils ---------- */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ---------- boot ---------- */
+load();
+const a0=active(); if(a0){ const m=ageMonths(a0.birth); curStage=stageOf(m)??0; }
+render();
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
